@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "1034444154294",
+    "firebase_url": "https://goolgeloginexam.firebaseio.com",
+    "project_id": "goolgeloginexam",
+    "storage_bucket": "goolgeloginexam.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1034444154294:android:13a7acf6015c2d47",
+        "android_client_info": {
+          "package_name": "com.example.login_google"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1034444154294-91shsp4bm8jjrn2m88ersecgec8f6f7a.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.login_google",
+            "certificate_hash": "9a38089df4d7e21f439ad0b93695b1c1e9f60fa1"
+          }
+        },
+        {
+          "client_id": "1034444154294-cgtu3tiusf8puv49qgo6rt83tk2clm0r.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD3yWcsNyL9Jb5R_k_m5a5YTMQ0Oo17DA0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1034444154294-cgtu3tiusf8puv49qgo6rt83tk2clm0r.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
