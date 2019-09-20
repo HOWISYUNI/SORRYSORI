@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "529131790515",
+    "firebase_url": "https://sorrysori-project.firebaseio.com",
+    "project_id": "sorrysori-project",
+    "storage_bucket": "sorrysori-project.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:529131790515:android:1bab612c4f5b941b",
+        "android_client_info": {
+          "package_name": "appcontest.sorrysori"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "529131790515-kc4p13pg5hudq6aku4iu5srsoqv4pscc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "appcontest.sorrysori",
+            "certificate_hash": "9015df7db03e08f4a1c8dfa7f0584d1661af3c1c"
+          }
+        },
+        {
+          "client_id": "529131790515-5s4g90hsqv11je6i5i3fhraei9k1hei4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAGnNEj807ZV1TXl5hS7m-6Y5kw3ipCsag"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "529131790515-5s4g90hsqv11je6i5i3fhraei9k1hei4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

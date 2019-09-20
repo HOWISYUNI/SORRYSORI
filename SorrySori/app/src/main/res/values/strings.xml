@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">SorrySori</string>
+    <string name="title_activity_main_menu">MainMenuActivity</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="kakao_app_key">9f95cfcb5ec23dfb4ae4cdc7405ac9d5</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="activity_recStartErr">Impossible de démarrer l\'enregistrement</string>
+    <string name="activity_recBusyErr">Recorder est occupé ou l\'autorisation d\'enregistrement est interdite</string>
+    <string name="activity_recFileErr">Can not create file</string>
+</resources>
