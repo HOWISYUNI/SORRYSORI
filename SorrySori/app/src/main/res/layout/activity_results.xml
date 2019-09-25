@@ -1,0 +1,231 @@
+<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/dec_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Results"
+    android:layout_alignParentTop="true"
+    android:layout_alignParentLeft="true"
+    android:layout_alignParentStart="true"
+    android:gravity="center_vertical"
+    android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="0.9"
+            android:gravity="center_horizontal" >
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/measurement_dba_mean"
+                android:id="@+id/textView_label_Mean_SL"
+                android:gravity="center_horizontal"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:layout_weight="0.3"
+                android:textSize="15sp" />
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/measurement_dba_min"
+                android:id="@+id/textView_label_Min_SL"
+                android:gravity="center_horizontal"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:layout_weight="0.3"
+                android:textSize="15sp" />
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/measurement_dba_max"
+                android:id="@+id/textView_label_Max_SL"
+                android:gravity="center_horizontal"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:layout_weight="0.3"
+                android:textSize="15sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="0.9"
+            android:gravity="center_horizontal" >
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_weight="0.3"
+                android:layout_height="4dp"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:id="@+id/textView_color_Mean_SL"
+                android:gravity="center_horizontal"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:textSize="15sp"
+                android:background="@color/R5_SL_level"/>
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_weight="0.3"
+                android:layout_height="4dp"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:id="@+id/textView_color_Min_SL"
+                android:gravity="center_horizontal"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:textSize="15sp"
+                android:background="@color/R2_SL_level"/>
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="4dp"
+                android:layout_weight="0.3"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:id="@+id/textView_color_Max_SL"
+                android:gravity="center_horizontal"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:textSize="15sp"
+                android:background="@color/R1_SL_level" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="0.9"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.3"
+                android:text="@string/no_valid_dba_value"
+                android:id="@+id/textView_value_Mean_SL"
+                android:gravity="center_horizontal"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.3"
+                android:text="@string/no_valid_dba_value"
+                android:id="@+id/textView_value_Min_SL"
+                android:gravity="center_horizontal"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.3"
+                android:text="@string/no_valid_dba_value"
+                android:id="@+id/textView_value_Max_SL"
+                android:gravity="center_horizontal"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="400sp"
+            android:gravity="center_horizontal">
+
+            <com.github.mikephil.charting.charts.PieChart
+                android:id="@+id/RNEChart"
+                android:layout_width="330sp"
+                android:layout_height="match_parent"
+                />
+        </LinearLayout>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:layout_alignParentBottom="true"
+        android:id="@+id/linearLayout">
+
+        <Button
+            android:id="@+id/measureBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/userinfo_button_measure"
+            />
+        <Button android:id="@+id/uploadBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/result_button_upload"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:id="@+id/result_progress_layout"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@drawable/loud"
+        android:gravity="end|center_horizontal"
+        android:layout_centerInParent="true"
+        android:layout_margin="10dp"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:gravity="center"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            style="@style/Base.TextAppearance.AppCompat.Title"
+            android:text="@string/result_title_progress_loading"/>
+
+        <ProgressBar
+            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+            android:id="@+id/result_progress_control"
+            android:layout_width="match_parent"
+            android:progress="25"
+            android:layout_margin="5dp"
+            android:layout_weight="1"
+            android:layout_height="0dp" />
+
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/result_progress_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/comment_cancel_change"/>
+
+    </LinearLayout>
+</LinearLayout>
+
+    <com.nhaarman.supertooltips.ToolTipRelativeLayout
+        android:id="@+id/activity_tooltip"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+    <ListView
+        android:id="@+id/left_drawer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start"
+        android:choiceMode="singleChoice"
+        android:divider="@android:color/transparent"
+        android:dividerHeight="0dp"
+        android:background="#111"/>
+
+</androidx.drawerlayout.widget.DrawerLayout>

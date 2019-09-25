@@ -39,6 +39,15 @@ android {
     buildToolsVersion '28.0.3'
 }
 
+repositories {
+    maven {
+        url 'https://www.jitpack.io'
+    }
+    maven {
+        url "https//repo.orbisgis.org"
+    }
+}
+
 dependencies {
     implementation fileTree(include: '*.jar', dir: 'libs')
     implementation files('libs/libDaumMapAndroid.jar')
@@ -62,12 +71,17 @@ dependencies {
     implementation group: project.KAKAO_SDK_GROUP, name: 'usermgmt', version: project.KAKAO_SDK_VERSION
     implementation files('libs/libDaumMapAndroid.jar')
     implementation 'com.google.android.gms:play-services-maps:17.0.0'
-    implementation 'com.github.PhilJay:MPAndroidChart:v2.2.4'
+    implementation 'com.github.PhilJay:MPAndroidChart:v2.2.+'
     implementation 'com.google.firebase:firebase-messaging:19.0.0'
     implementation 'com.google.firebase:firebase-firestore:18.0.0'
     implementation 'com.firebaseui:firebase-ui-database:5.0.0'
     implementation 'de.hdodenhof:circleimageview:2.2.0'
     implementation 'com.github.bumptech.glide:glide:4.9.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.9.0'
+    //소음측정
+    implementation 'org.slf4j:slf4j-simple:1.7.12'
+    implementation 'com.github.wendykierp:JTransforms:3.1'
+    implementation 'com.nhaarman.supertooltips:library:3.0.0'
+    implementation 'gun0912.ted:tedpermission:2.2.2'
 }
 apply plugin: 'com.google.gms.google-services'

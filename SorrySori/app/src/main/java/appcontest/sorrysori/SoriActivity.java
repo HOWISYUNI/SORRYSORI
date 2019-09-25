@@ -9,6 +9,6 @@ public class SoriActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_sori);
+        setContentView(R.layout.activity_decibel);
     }
 }

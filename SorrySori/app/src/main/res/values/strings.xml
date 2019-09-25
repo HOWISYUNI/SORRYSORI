@@ -9,7 +9,75 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="kakao_app_key">9f95cfcb5ec23dfb4ae4cdc7405ac9d5</string>
     <string name="title_activity_maps">Map</string>
-    <string name="activity_recStartErr">Impossible de démarrer l\'enregistrement</string>
-    <string name="activity_recBusyErr">Recorder est occupé ou l\'autorisation d\'enregistrement est interdite</string>
-    <string name="activity_recFileErr">Can not create file</string>
+
+    <!--Decible Strings-->
+    <string name="caption_SL">소음 레벨</string>
+    <string name="recstart">소음측정 시작</string>
+    <string name="recend">소음측정 종료</string>
+    <string name="local_service_started">로컬 서비스가 시작되었습니다.</string>
+    <string name="title_service_measurement">소음측정</string>
+    <string name="measurement_service_disconnected">소음측정 서비스가 작동되지 않습니다.</string>
+    <string name="export_zip_info">Export archive description\n\n
+meta.properties file are general info on device and record:\n
+- version_name Major, minor and revision version\n
+- build_date Date of APK assembly\n
+- version_number Application version integer\n
+- time_length Record length in seconds\n
+- uuid Random identifier set on first application start\n
+- leq_mean Mean equivalent sound level in dB(A) of the measure\n
+- record_utc Record time in epoch millisecond\n
+- device_manufacturer device_model device_product Generic Hardware information of measure device\n
+- pleasantness User input pleasantness 1-100\n
+- tags Comma separated values of user selected tags (english only)\n
+- user_profile User knowledge in acoustics NONE, NOVICE, EXPERT\n
+- noiseparty_tag Record NoiseParty identifier\n\n
+
+track.geojson 1s samples of measures. Using the geojson format (http://geojson.io)\n
+- leq_mean 1s mean equivalent sound level in dB(A)\n
+- accuracy Localisation precision in m (provided by gps, network or gsm)\n
+- location_utc Localisation fix time in epoch millisecond\n
+- leq_utc Measure time in epoch millisecond\n
+- leq_id Unique identifier of record\n
+- marker_color Color used by geojson.io\n
+- bearing Movement orientation.See https://developer.android.com/reference/android/location/Location.html#getBearing()\n
+- speed Estimated device speed in m/s\n
+- leq_frequency 1s mean equivalent sound level in dB(A) for the specified frequency\n</string>
+    <string name="notification_record_content"> %1$.1f dB(A)</string>
+    <string name="record_message">버튼을 눌러 소음을 기록하세요!</string>
+    <string name="permission_explain_audio_record">쏘리소리는 녹음 권한이 필요합니다.</string>
+    <string name="permission_explain_access_wifi_state">와이파이 연결 혹은 데이터 연결을 확인해주세요.</string>
+    <string name="drawer_open">Open navigation drawer</string>
+    <string name="drawer_close">Close navigation drawer</string>
+    <string name="title_menu">메뉴</string>
+    <string name="upload_progress_title">업로딩&#8230;</string>
+    <string name="upload_progress_message">소음측정 업로딩</string>
+    <string name="measurement_processlastsamples">Processing remaining %d samples&#8230;</string>
+    <string name="no_valid_dba_value">-</string>
+    <string name="comment_cancel_change">취소</string>
+    <string name="comment_save_change">저장</string>
+    <string name="comment_delete_record">삭제</string>
+    <string name="history_title_delete">선택된 값을 삭제하겠습니까?</string>
+    <string name="history_length">%d 초</string>
+    <string name="history_date">- %s</string>
+    <string name="history_sel">%.01f dB</string>
+    <string name="no_results">저장된 소음이 없습니다. 소음 기록을 먼저 진행하세요.</string>
+    <string-array name="catNE_list_array">
+        <item>55 dB - </item>
+        <item>55-40 dB</item>
+        <item>40-0 dB</item>
+    </string-array>
+    <string name="hint_userinput">Tap here to set a description</string>
+    <string name="hint_userinput_noiseparty_tag">NoiseCapture Party code</string>
+    <string name="userinfo_unpleasant">Unpleasant</string>
+    <string name="userinfo_pleasant">Pleasant</string>
+    <string name="userinfo_tags_measurement_conditions">Measurement conditions</string>
+    <string name="userinfo_tags">Predominant sources</string>
+    <string name="userinfo_button_results">Valid</string>
+    <string name="measurement_dba_min">최소</string>
+    <string name="measurement_dba_max">최대</string>
+    <string name="measurement_dba_mean">평균</string>
+    <string name="userinfo_button_measure">처음으로</string>
+    <string name="result_button_upload">공유하기</string>
+    <string name="result_title_progress_loading">로딩 중입니다.</string>
+    <string name="decibel_saved">소음이 저장되었습니다.</string>
 </resources>

@@ -9,6 +9,8 @@
     -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
 
     <meta-data
         android:name="com.kakao.sdk.AppKey"
@@ -23,9 +25,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
+        <service android:name=".MeasurementService" />
         <activity android:name=".ChatActivity"></activity>
         <activity android:name=".SoriActivity" />
-
+        <activity android:name=".Decibelfragment"/>
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyANM8k-QVoqwTfv34wNVYi-40M_f4shVEk" />
@@ -56,6 +59,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".History"></activity>
+        <activity android:name=".Results"></activity>
     </application>
 
 </manifest>
