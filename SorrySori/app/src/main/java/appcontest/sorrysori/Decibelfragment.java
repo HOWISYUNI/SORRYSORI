@@ -1,13 +1,14 @@
 package appcontest.sorrysori;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
@@ -27,6 +28,7 @@ public class Decibelfragment extends MainActivity implements
         SharedPreferences.OnSharedPreferenceChangeListener, MapFragment.MapFragmentAvailableListener {
 
     private AtomicBoolean isComputingMovingLeq = new AtomicBoolean(false);
+    private MeasurementManager measurementManager;
     // For the Charts
     private DoProcessing doProcessing;
     private onButtonStop onbuttonStop;
@@ -171,7 +173,7 @@ public class Decibelfragment extends MainActivity implements
         }
     };
 
-    private static final class  onButtonStop implements View.OnClickListener {
+    private static final class onButtonStop implements View.OnClickListener {
         private Decibelfragment activity;
 
         public onButtonStop(Decibelfragment activity) {
@@ -180,15 +182,31 @@ public class Decibelfragment extends MainActivity implements
 
         @Override
         public void onClick(View v) {
-            // Save changes
-            //activity.saveChanges();
-            //Open result page
-            Intent ir = new Intent(activity, Results.class);
-            if(activity.record != null) {
-                ir.putExtra(MainActivity.RESULTS_RECORD_ID, activity.record.getId());
-            }
-            ir.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            activity.startActivity(ir);
+            AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+            // Add the buttons
+            builder.setPositiveButton(R.string.comment_no, new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    if(activity.record != null) {
+                        // Delete record
+                        activity.measurementManager.deleteRecord(activity.record.getId());
+                        activity.record = null;
+                    }
+                }
+            });
+            builder.setNegativeButton(R.string.comment_yes, new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    Intent ir = new Intent(activity, Results.class);
+                    if(activity.record != null) {
+                        ir.putExtra(MainActivity.RESULTS_RECORD_ID, activity.record.getId());
+                    }
+                    ir.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    activity.startActivity(ir);
+                }
+            });
+            // Create the AlertDialog
+            AlertDialog dialog = builder.create();
+            dialog.setTitle(R.string.comment_title_delete);
+            dialog.show();
         }
     }
 

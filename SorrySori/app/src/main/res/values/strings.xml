@@ -56,6 +56,8 @@ track.geojson 1s samples of measures. Using the geojson format (http://geojson.i
     <string name="comment_cancel_change">취소</string>
     <string name="comment_save_change">저장</string>
     <string name="comment_delete_record">삭제</string>
+    <string name="comment_no">아니오</string>
+    <string name="comment_yes">예</string>
     <string name="history_title_delete">선택된 값을 삭제하겠습니까?</string>
     <string name="history_length">%d 초</string>
     <string name="history_date">- %s</string>
@@ -80,4 +82,5 @@ track.geojson 1s samples of measures. Using the geojson format (http://geojson.i
     <string name="result_button_upload">공유하기</string>
     <string name="result_title_progress_loading">로딩 중입니다.</string>
     <string name="decibel_saved">소음이 저장되었습니다.</string>
+    <string name="comment_title_delete">소음을 저장하시겠습니까?</string>
 </resources>
