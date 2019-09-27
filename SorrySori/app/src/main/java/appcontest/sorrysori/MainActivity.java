@@ -40,6 +40,9 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 import com.kakao.auth.AuthType;
 import com.kakao.auth.ErrorCode;
 import com.kakao.auth.ISessionCallback;
@@ -64,6 +67,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+
+import static android.widget.Toast.LENGTH_LONG;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -151,17 +156,38 @@ public class MainActivity extends AppCompatActivity {
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            mFirebaseDatabaseReference.child("User").setValue(user.getEmail());
-                            Toast.makeText(MainActivity.this, "구글 로그인 성공!", Toast.LENGTH_LONG).show();
-                            Intent intent = new Intent(MainActivity.this, MainMenuActivity.class);
-                            startActivity(intent);
-                        } else {
-                            Toast.makeText(MainActivity.this, "인증 실패", Toast.LENGTH_LONG).show();
-                            // Sign in success, update UI with the signed-in user's information
-                        }// ...
+                        FirebaseUser user = mAuth.getCurrentUser();
+                        Log.d("MainActivity", "셋 밸류");
+
+                        //여긴 한번만 실행하게
+                        //  mFirebaseDatabaseReference.child("User").setValue(null);
+                        String mail = user.getEmail();
+                        mFirebaseDatabaseReference.child("User").addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                                    if(mail.equals(snapshot.child("email").getValue())){
+                                        Log.d("MainActivity", String.valueOf(snapshot.child("email").getValue()));
+                                        Toast.makeText(MainActivity.this, "중복된 이메일입니다.", Toast.LENGTH_LONG).show();
+                                    } else{
+                                        Log.d("MainActivity", "왜 중복값이 아니죠?");
+                                        User user1 = new User(user.getEmail(), "asdasd");
+                                        Log.d("MainActivity", String.valueOf(snapshot.child("email")));
+                                        mFirebaseDatabaseReference.child("User").push().setValue(user1);
+                                    }
+                                }
+                            }
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+                            }
+                        });
+
+                        Toast.makeText(MainActivity.this, "구글 로그인 성공!", LENGTH_LONG).show();
+                        Intent intent = new Intent(MainActivity.this, MapsActivity.class);
+                        startActivity(intent);
                     }
+                        // Sign in success, update UI with the signed-in user's information
+
                 });
     }
 
@@ -614,7 +640,7 @@ public class MainActivity extends AppCompatActivity {
     private boolean checkWifiState() {
 
         // Check connection state
-        WifiManager wifiMgr = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+        WifiManager wifiMgr = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         if (wifiMgr.isWifiEnabled()) { // WiFi adapter is ON
             WifiInfo wifiInfo = wifiMgr.getConnectionInfo();
             if (wifiInfo.getNetworkId() == -1) {
