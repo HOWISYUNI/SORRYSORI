@@ -99,7 +99,6 @@ public class Decibelfragment extends MainActivity implements
         // Depending of the settings
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
         sharedPref.registerOnSharedPreferenceChangeListener(this);
-        Boolean CheckNbRunSettings = sharedPref.getBoolean("settings_caution", true);
 
         hasMaximalMeasurementTime = sharedPref.getBoolean(HAS_MAXIMAL_MEASURE_TIME_SETTING,
                 false);
