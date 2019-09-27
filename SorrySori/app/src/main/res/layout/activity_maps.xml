@@ -4,9 +4,11 @@
     android:layout_width="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
+
+
     <fragment
         xmlns:map="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/map"
+        android:id="@+id/MapsForLocation"
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -17,10 +19,13 @@
         android:onClick="onLastLocationButtonClicked"
         android:text="현재 위치"/>
 
-    <Button
-        android:layout_marginLeft="310dp"
+    <!--
+    <TextView
+        android:id="@+id/textview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:onClick="back"
-        android:text="뒤로 가기"/>
+        android:text=""
+        android:layout_gravity="center_horizontal"/>-->
+
+
 </FrameLayout>
