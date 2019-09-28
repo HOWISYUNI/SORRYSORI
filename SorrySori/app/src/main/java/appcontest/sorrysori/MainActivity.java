@@ -43,23 +43,9 @@ import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
-import com.kakao.auth.AuthType;
-import com.kakao.auth.ErrorCode;
-import com.kakao.auth.ISessionCallback;
-import com.kakao.auth.Session;
-import com.kakao.network.ErrorResult;
-import com.kakao.usermgmt.UserManagement;
-import com.kakao.usermgmt.callback.LogoutResponseCallback;
-import com.kakao.usermgmt.callback.MeResponseCallback;
-import com.kakao.usermgmt.response.model.UserProfile;
-import com.kakao.util.exception.KakaoException;
-import com.kakao.util.helper.log.Logger;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
-
 import org.slf4j.LoggerFactory;
-
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -69,37 +55,27 @@ import java.util.Collection;
 import java.util.List;
 
 import static android.widget.Toast.LENGTH_LONG;
-
-
 public class MainActivity extends AppCompatActivity {
     static {
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
     }
     DatabaseReference mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference();
-    private SessionCallback callback;
-
     private CheckBox checkBox;
     private String id;
     private boolean saveLoginData;
     private EditText idText;
     private SharedPreferences appData;
-
     private FirebaseAuth mAuth;
     private GoogleSignInClient mGoogleSignInClient;
     public static int RC_SIGN_IN=1000;
-
-    // Color for noise exposition representation
     public int[] NE_COLORS;
     public int[] NE_IMGS;
     public static final String RESULTS_RECORD_ID = "RESULTS_RECORD_ID";
     protected static final org.slf4j.Logger MAINLOGGER = LoggerFactory.getLogger(MainActivity.class);
-
-    // For the list view
     public ListView mDrawerList;
     public DrawerLayout mDrawerLayout;
     public ActionBarDrawerToggle mDrawerToggle;
     private ProgressDialog progress;
-
     public static final int PERMISSION_RECORD_AUDIO_AND_GPS = 1;
     public static final int PERMISSION_WIFI_STATE = 2;
 
@@ -107,23 +83,15 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_main);
         Resources res = getResources();
         NE_COLORS = new int[]{res.getColor(R.color.R1_SL_level),
                 res.getColor(R.color.R2_SL_level),
                 res.getColor(R.color.R5_SL_level)};
         NE_IMGS = new int[]{(R.drawable.loud),(R.drawable.disgust),(R.drawable.peace)};
-
         mAuth = FirebaseAuth.getInstance();
-        callback = new SessionCallback();
-        Session.getCurrentSession().addCallback(callback);
-        Session.getCurrentSession().checkAndImplicitOpen();
-
         checkBox = findViewById(R.id.checkBox);
         idText = findViewById(R.id.main_id);
-
-
         appData = getSharedPreferences("appData", MODE_PRIVATE);
         load();
 
@@ -131,14 +99,12 @@ public class MainActivity extends AppCompatActivity {
             idText.setText(id);
             checkBox.setChecked(saveLoginData);
         }
-
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build();
 
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
-
         SignInButton button = findViewById(R.id.google_login);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -150,7 +116,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
-
         AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
         mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -158,10 +123,10 @@ public class MainActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         FirebaseUser user = mAuth.getCurrentUser();
                         Log.d("MainActivity", "셋 밸류");
-
-                        //여긴 한번만 실행하게
-                        //  mFirebaseDatabaseReference.child("User").setValue(null);
                         String mail = user.getEmail();
+
+                       // User user1 = new User(user.getEmail(), "asdasd");
+                      //  mFirebaseDatabaseReference.child("User").push().setValue(user1);
                         mFirebaseDatabaseReference.child("User").addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -181,26 +146,22 @@ public class MainActivity extends AppCompatActivity {
                             public void onCancelled(@NonNull DatabaseError databaseError) {
                             }
                         });
-
                         Toast.makeText(MainActivity.this, "구글 로그인 성공!", LENGTH_LONG).show();
                         Intent intent = new Intent(MainActivity.this, MapsActivity.class);
                         startActivity(intent);
                     }
-                        // Sign in success, update UI with the signed-in user's information
-
                 });
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
         if (requestCode == RC_SIGN_IN) {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             try {
                 GoogleSignInAccount account = task.getResult(ApiException.class);
                 firebaseAuthWithGoogle(account);
             } catch (ApiException e) {
-                // Google Sign In failed, update UI appropriately
+
             }
         }
     }
@@ -220,6 +181,26 @@ public class MainActivity extends AppCompatActivity {
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
                                 FirebaseUser user = mAuth.getCurrentUser();
+                                String mail = user.getEmail();
+                                mFirebaseDatabaseReference.child("User").addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                                            if(mail.equals(snapshot.child("email").getValue())){
+                                                Log.d("MainActivity", String.valueOf(snapshot.child("email").getValue()));
+                                                Toast.makeText(MainActivity.this, "중복된 이메일입니다.", Toast.LENGTH_LONG).show();
+                                            } else{
+                                                Log.d("MainActivity", "왜 중복값이 아니죠?");
+                                                User user1 = new User(user.getEmail(), "asdasd");
+                                                Log.d("MainActivity", String.valueOf(snapshot.child("email")));
+                                                mFirebaseDatabaseReference.child("User").push().setValue(user1);
+                                            }
+                                        }
+                                    }
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                                    }
+                                });
                                 Intent intent = new Intent(MainActivity.this, MainMenuActivity.class);
                                 startActivity(intent);
                             } else {
@@ -243,17 +224,9 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void kakaoLogin(View view){
-        Session session = Session.getCurrentSession();
-        session.addCallback(new SessionCallback());
-        session.open(AuthType.KAKAO_LOGIN_ALL, MainActivity.this);
-    }
-
     public void signUp(View view){
-//        Intent intent = new Intent(MainActivity.this, SignUpActivity.class);
-//        startActivity(intent);
-          Intent intent = new Intent(MainActivity.this, ChatActivity.class);
-          startActivity(intent);
+        Intent intent = new Intent(MainActivity.this, MainMenuActivity.class);
+        startActivity(intent);
     }
 
     private void load() {
@@ -263,70 +236,13 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        // SharedPreferences 객체만으론 저장 불가능 Editor 사용
         super.onDestroy();
         SharedPreferences.Editor editor = appData.edit();
-        // 에디터객체.put타입( 저장시킬 이름, 저장시킬 값 )
-        // 저장시킬 이름이 이미 존재하면 덮어씌움
         editor.putBoolean("SAVE_LOGIN_DATA", checkBox.isChecked());
         editor.putString("ID", idText.getText().toString().trim());
-        // apply, commit 을 안하면 변경된 내용이 저장되지 않음
         editor.apply();
     }
 
-    public void kakaoLogout(View view){
-        UserManagement.getInstance().requestLogout(new LogoutResponseCallback() {
-            @Override
-            public void onCompleteLogout() {
-                Intent intent = new Intent(MainActivity.this, MainActivity.class);
-                startActivity(intent);
-            }
-        });
-    }
-
-    private class SessionCallback implements ISessionCallback {
-        @Override
-        public void onSessionOpened() {
-            UserManagement.getInstance().requestMe(new MeResponseCallback() {
-
-                @Override
-                public void onFailure(ErrorResult errorResult) {
-                    String message = "failed to get user info. msg=" + errorResult;
-                    Logger.d(message);
-
-                    ErrorCode result = ErrorCode.valueOf(errorResult.getErrorCode());
-                    if (result == ErrorCode.CLIENT_ERROR_CODE) {
-                        finish();
-                    } else {
-                        //redirectMainActivity();
-                    }
-                }
-
-                @Override
-                public void onSessionClosed(ErrorResult errorResult) {
-                }
-
-                @Override
-                public void onNotSignedUp() {
-                }
-
-                @Override
-                public void onSuccess(UserProfile userProfile) {
-                    //로그인에 성공하면 로그인한 사용자의 일련번호, 닉네임, 이미지url등을 리턴합니다.
-                    //사용자 ID는 보안상의 문제로 제공하지 않고 일련번호는 제공합니다.
-                    Log.e("UserProfile", userProfile.toString());
-                    Intent intent = new Intent(MainActivity.this, Decibelfragment.class);
-                    startActivity(intent);
-                }
-            });
-        }
-
-        @Override
-        public void onSessionOpenFailed(KakaoException exception) {
-            // 세션 연결이 실패했을때
-            // 어쩔때 실패되는지는 테스트를 안해보았음 ㅜㅜ
-        }
-    }
 
     //Decibel
     protected boolean checkAndAskPermissions() {
@@ -337,17 +253,11 @@ public class MainActivity extends AppCompatActivity {
                 != PackageManager.PERMISSION_GRANTED) {
             if (ActivityCompat.shouldShowRequestPermissionRationale(this,
                     Manifest.permission.RECORD_AUDIO)) {
-                // After the user
-                // sees the explanation, try again to request the permission.
                 Toast.makeText(this,R.string.permission_explain_audio_record, Toast.LENGTH_LONG).show();
             }
             if (ActivityCompat.shouldShowRequestPermissionRationale(this,
                     Manifest.permission.ACCESS_FINE_LOCATION)) {
-                // After the user
-                // sees the explanation, try again to request the permission.
-                //Toast.makeText(this,R.string.permission_explain_gps, Toast.LENGTH_LONG).show();
             }
-            // Request the permission.
             ActivityCompat.requestPermissions(this,
                     new String[]{Manifest.permission.RECORD_AUDIO,
                             Manifest.permission.ACCESS_FINE_LOCATION,
@@ -358,40 +268,25 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
-
     @Override
     protected void onPause() {
         if(progress != null && progress.isShowing()) {
             try {
                 progress.dismiss();
             } catch (IllegalArgumentException ex) {
-                //Ignore
             }
         }
         super.onPause();
     }
 
-    /**
-     * @return Version information on this application
-     * @throws PackageManager.NameNotFoundException
-     */
-
-    /**
-     * If necessary request user to acquire permisions for critical ressources (gps and microphone)
-     * @return True if service can be bind immediately. Otherwise the bind should be done using the
-     * @see #onRequestPermissionsResult
-     */
     protected boolean checkAndAskWifiStatePermission() {
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_WIFI_STATE)
                 != PackageManager.PERMISSION_GRANTED) {
             if (ActivityCompat.shouldShowRequestPermissionRationale(this,
                     Manifest.permission.ACCESS_WIFI_STATE)) {
-                // After the user
-                // sees the explanation, try again to request the permission.
                 Toast.makeText(this,R.string.permission_explain_access_wifi_state, Toast.LENGTH_LONG).show();
             }
-            // Request the permission.
             ActivityCompat.requestPermissions(this,
                     new String[]{Manifest.permission.ACCESS_WIFI_STATE},
                     PERMISSION_WIFI_STATE);
@@ -402,33 +297,24 @@ public class MainActivity extends AppCompatActivity {
 
     void initDrawer(Integer recordId) {
         try {
-            // List view
             mDrawerLayout = (DrawerLayout) findViewById(R.id.dec_layout);
             mDrawerList = (ListView) findViewById(R.id.left_drawer);
-            // Set the adapter for the list view
             mDrawerToggle = new ActionBarDrawerToggle(
-                    this,                  /* host Activity */
-                    mDrawerLayout,         /* DrawerLayout object */
-                    R.string.drawer_open,  /* "open drawer" description */
-                    R.string.drawer_close  /* "close drawer" description */
+                    this,
+                    mDrawerLayout,
+                    R.string.drawer_open,
+                    R.string.drawer_close
             ) {
-                /**
-                 * Called when a drawer has settled in a completely closed state.
-                 */
                 public void onDrawerClosed(View view) {
                     super.onDrawerClosed(view);
                     getSupportActionBar().setTitle(getTitle());
                 }
 
-                /**
-                 * Called when a drawer has settled in a completely open state.
-                 */
                 public void onDrawerOpened(View drawerView) {
                     super.onDrawerOpened(drawerView);
                     getSupportActionBar().setTitle(getString(R.string.title_menu));
                 }
             };
-            // Set the drawer toggle as the DrawerListener
             mDrawerLayout.setDrawerListener(mDrawerToggle);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setHomeButtonEnabled(true);
@@ -438,14 +324,12 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    // Drawer navigation
     void initDrawer() {
         initDrawer(null);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         return true;
     }
 
@@ -461,7 +345,6 @@ public class MainActivity extends AppCompatActivity {
             finish();
         } else {
             finish();
-            // Show home
             Intent im = new Intent(Intent.ACTION_MAIN);
             im.addCategory(Intent.CATEGORY_HOME);
             im.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -487,10 +370,6 @@ public class MainActivity extends AppCompatActivity {
         return sharedPref.getBoolean("settings_data_transfer_wifi_only", false);
     }
 
-    /**
-     * Check the non-uploaded results and the connection states
-     * Upload results if necessary
-     */
     protected void checkTransferResults() {
         if (!isManualTransferOnly()) {
             MeasurementManager measurementManager = new MeasurementManager(this);
@@ -503,7 +382,6 @@ public class MainActivity extends AppCompatActivity {
                         return;
                     }
                 } else {
-                    // Transfer will begin when user validate check wifi rights
                     return;
                 }
             }
@@ -511,11 +389,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
-    /**
-     * Ping largest internet dns access to check if internet is available
-     * @return True if Internet is available
-     */
     public boolean isOnline() {
         try {
             URL url = new URL(MeasurementUploadWPS.BASE_URL);
@@ -527,17 +400,10 @@ public class MainActivity extends AppCompatActivity {
         }
         return false;
     }
-
-    /**
-     * Transfer provided records
-     */
     protected void doTransferRecords(List<Integer> selectedRecordIds) {
         runOnUiThread(new SendResults(this, selectedRecordIds));
     }
 
-    /**
-     * Transfer records without checking user preferences
-     */
     protected void doTransferRecords() {
         if(!isOnline()) {
             MAINLOGGER.info("Not online, skip send of record");
@@ -547,8 +413,6 @@ public class MainActivity extends AppCompatActivity {
         List<Storage.Record> records = measurementManager.getRecords();
         final List<Integer> recordsToTransfer = new ArrayList<>();
         for(Storage.Record record : records) {
-            // Auto send records only if the record is not in progress and if the user have
-            // validated the Description activity
             if(record.getUploadId().isEmpty() && record.getTimeLength() > 0 && record
                     .getNoisePartyTag() != null) {
                 recordsToTransfer.add(record.getId());
@@ -575,16 +439,12 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void run() {
-            // Export
             try {
                 mainActivity.progress = ProgressDialog.show(mainActivity, mainActivity
                                 .getText(R.string
                                         .upload_progress_title),
                         mainActivity.getText(R.string.upload_progress_message), true);
             } catch (RuntimeException ex) {
-                // This error may arise on some system
-                // The display of progression are not vital so cancel the crash by handling the
-                // error
                 MAINLOGGER.error(ex.getLocalizedMessage(), ex);
             }
             new Thread(new SendZipToServer(mainActivity, recordsToTransfer, mainActivity
@@ -599,18 +459,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     protected void onTransferRecord() {
-        // Nothing to do
     }
 
-
-    /***
-     * Checks that application runs first time and write flags at SharedPreferences
-     * Need further codes for enhancing conditions
-     * @return true if 1st time
-     * see : http://stackoverflow.com/questions/9806791/showing-a-message-dialog-only-once-when-application-is-launched-for-the-first
-     * see also for checking version (later) : http://stackoverflow.com/questions/7562786/android-first-run-popup-dialog
-     * Can be used for checking new version
-     */
     protected boolean CheckNbRun(String preferenceName, int maxCount) {
         SharedPreferences preferences = getPreferences(MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
@@ -628,7 +478,6 @@ public class MainActivity extends AppCompatActivity {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch (requestCode) {
             case PERMISSION_WIFI_STATE: {
-                // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     checkTransferResults();
@@ -639,17 +488,15 @@ public class MainActivity extends AppCompatActivity {
 
     private boolean checkWifiState() {
 
-        // Check connection state
         WifiManager wifiMgr = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
-        if (wifiMgr.isWifiEnabled()) { // WiFi adapter is ON
+        if (wifiMgr.isWifiEnabled()) {
             WifiInfo wifiInfo = wifiMgr.getConnectionInfo();
             if (wifiInfo.getNetworkId() == -1) {
-                return false; // Not connected to an access-Point
+                return false;
             }
-            // Connected to an Access Point
             return true;
         } else {
-            return false; // WiFi adapter is OFF
+            return false;
         }
     }
 
@@ -712,7 +559,6 @@ public class MainActivity extends AppCompatActivity {
                     try {
                         progress.dismiss();
                     } catch (IllegalArgumentException ex) {
-                        //Ignore
                     }
                 }
             }
@@ -722,11 +568,9 @@ public class MainActivity extends AppCompatActivity {
     public interface OnUploadedListener {
         void onMeasurementUploaded();
     }
-    // Choose color category in function of sound level
     public static int getNEcatColors(double SL) {
 
         int NbNEcat;
-
         if (SL > 55.) {
             NbNEcat = 0;
         } else if (SL > 40) {
@@ -738,9 +582,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public static int getNEImgs(double SL) {
-
         int imgs;
-
         if (SL > 55.) {
             imgs = 0;
         } else if (SL > 40) {

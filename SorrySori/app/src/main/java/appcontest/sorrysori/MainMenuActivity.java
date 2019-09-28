@@ -19,8 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainMenuActivity extends AppCompatActivity {
-    private FirebaseAuth mAuth;
-//    FirebaseUser user = mAuth.getCurrentUser();
+
     private FragmentManager fragmentManager = getSupportFragmentManager();
     private FirstFragment firstFragment = new FirstFragment();
     private SecondFragment secondFragment = new SecondFragment();
@@ -31,9 +30,10 @@ public class MainMenuActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
-        mAuth = FirebaseAuth.getInstance();
 
-        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        FragmentTransaction transaction = fragmentManager.beginTransaction().
+                replace(R.id.frame_layout, firstFragment);
+
         transaction.replace(R.id.frame_layout, firstFragment).commitAllowingStateLoss();
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {

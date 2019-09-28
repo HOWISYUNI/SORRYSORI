@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_weight="1"
+    android:background="@drawable/orange"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -10,50 +11,62 @@
 
 
     <ImageView
-        android:layout_weight="3"
         android:id="@+id/imageView"
-        android:layout_width="match_parent"
-        android:layout_height="203dp"
-        app:srcCompat="@mipmap/ic_launcher" />
+        android:layout_width="350dp"
+        android:layout_height="150dp"
+        android:layout_gravity="center"
+        android:layout_marginLeft="30dp"
+        android:layout_weight="5"
+        app:srcCompat="@drawable/mainactivity" />
 
     <EditText
-        android:layout_weight="0.2"
-        android:hint="이메일(e-mail)"
         android:id="@+id/main_id"
-        android:textStyle="bold"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="300dp"
+        android:layout_height="25dp"
+        android:layout_gravity="center"
+        android:layout_marginBottom="10dp"
+        android:layout_weight="1"
+        android:background="@drawable/buttonside"
         android:ems="10"
-        android:inputType="textEmailAddress" />
+        android:hint="  이메일(e-mail)"
+        android:inputType="textEmailAddress"
+        android:textColorHint="#7AC943"
+        android:textStyle="bold" />
 
     <EditText
-        android:hint="비밀번호(Password)"
-        android:layout_weight="0.2"
-        android:textStyle="bold"
         android:id="@+id/main_password"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="300dp"
+        android:layout_height="25dp"
+        android:layout_gravity="center"
+        android:layout_weight="1"
+        android:background="@drawable/buttonside"
         android:ems="10"
-        android:inputType="textPassword" />
+        android:hint="  비밀번호(Password)"
+        android:inputType="textPassword"
+        android:textColorHint="#7AC943"
+        android:textStyle="bold" />
 
     <CheckBox
-        android:layout_weight="0.3"
         android:id="@+id/checkBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="55dp"
+        android:layout_weight="0.3"
         android:text="Saved ID" />
 
     <Button
-        android:layout_weight="0.3"
         android:id="@+id/button"
-        android:onClick="login"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="로그인" />
+        android:layout_width="250dp"
+        android:layout_height="20dp"
+        android:layout_gravity="center"
+        android:layout_weight="1"
+        android:background="@drawable/login_button"
+        android:onClick="login" />
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:orientation="horizontal">
 
         <TextView
@@ -70,47 +83,15 @@
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
             android:text="아이디 찾기" />
-
-        <TextView
-            android:layout_weight="1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:text="비밀번호 찾기" />
     </LinearLayout>
 
-    <View
-        android:id="@+id/divider2"
-        android:layout_width="match_parent"
-        android:layout_height="3dp"
-        android:background="#9FA8DA" />
 
     <com.google.android.gms.common.SignInButton
         android:id="@+id/google_login"
-        android:layout_width="match_parent"
+        android:layout_width="350dp"
+        android:layout_gravity="center"
+        android:layout_marginBottom="50dp"
         android:layout_height="wrap_content"
         android:layout_weight="0.3"></com.google.android.gms.common.SignInButton>
 
-    <com.kakao.usermgmt.LoginButton
-        android:id="@+id/btn_kakao_login"
-        android:onClick="kakaoLogin"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
-    </com.kakao.usermgmt.LoginButton>
-
-    <Button
-        android:id="@+id/button3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Button"
-        android:onClick="kakaoLogout"
-        android:layout_weight="0.3"/>
-
-    <Button
-        android:id="@+id/button2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Button"
-        android:onClick="button"
-        android:layout_weight="0.3"/>
 </LinearLayout>

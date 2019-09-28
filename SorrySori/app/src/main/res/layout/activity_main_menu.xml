@@ -15,11 +15,6 @@
         android:layout_marginBottom="?attr/actionBarSize">
     </FrameLayout>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:text="text"/>
-
     <com.google.android.material.bottomnavigation.BottomNavigationView
         app:labelVisibilityMode = "labeled"
         android:id="@+id/navigation"

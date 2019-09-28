@@ -14,18 +14,9 @@ public class FirstFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_first, container, false);
-        /*
-        Button btn = (Button) view.findViewById(R.id.fragmentBtn1);
-
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), MapsActivity.class);
-                startActivity(intent);
-            }
-        });
-        */
+        //Intent intent1 = new Intent(getActivity(), Decibelfragment.class);
+        //startActivity(intent1);
+        View view = inflater.inflate(R.layout.activity_imsi_decibel, container, false);
         return view;
     }
 }
