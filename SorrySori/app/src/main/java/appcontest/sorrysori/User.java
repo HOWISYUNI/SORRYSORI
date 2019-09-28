@@ -16,12 +16,6 @@ public class User {
 
     }
 
-    public User(String email) {
-        this.email = email;
-        this.address=null;
-    }
-
-
     public Map<String, Object> toMap() {
         HashMap<String, Object> result = new HashMap<>();
         result.put("email", email);

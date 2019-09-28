@@ -37,10 +37,22 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+
+import static android.widget.Toast.LENGTH_LONG;
 
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback{
 
@@ -49,7 +61,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     String[] REQUIRED_PERMISSIONS = {Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION};
     private GpsTracker gpsTracker;
     private GoogleMap mMap;
+    private FirebaseAuth mAuth;
     private FusedLocationProviderClient mFusedLocationClient;//현재위치를 저장할 인스턴스
+    DatabaseReference mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference();
 
     public MapsActivity() {
     }
@@ -68,7 +82,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         //현재위치 얻는 과정. onLastLocationButtonClicked와 연결
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-        
+
         if(!checkLocationServicesStatus()){
             showdialogForLocationServicesSetting();
         }else{
@@ -82,17 +96,17 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         거부한적 있는경우 -> 퍼미션 이유 설명 -> 퍼미션 요청 = onRequestPermissionsResult() -> 퍼미션을 갖게될지도!
         거부한적 없는경우 -> 퍼미션요청 = onRequestPermissionsResult() -> 퍼미션을 갖게될지도!
         */
-        
+
         // 1. 위치퍼미션을 갖고있는지 체크합니다.
         int hasFineLocationPermission = ContextCompat.checkSelfPermission(MapsActivity.this,Manifest.permission.ACCESS_FINE_LOCATION);
         int hasCoarseLocationPermission = ContextCompat.checkSelfPermission(MapsActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION);
-        
+
         //2. 이미 퍼미션을 갖고있다면
         if (hasFineLocationPermission == PackageManager.PERMISSION_GRANTED && hasCoarseLocationPermission == PackageManager.PERMISSION_GRANTED){
             // 3. 버튼을 클릭해서 퍼미션을 가져옵니다.
         }else{
             // 2. 퍼미션이 없다면
-            
+
             // 3-1. 퍼미션을 거부한 적이 있다면 
             if(ActivityCompat.shouldShowRequestPermissionRationale(MapsActivity.this,REQUIRED_PERMISSIONS[0])){
                 // 3-2 퍼미션 요청 전에 퍼미션이 필요한 이유를 설명
@@ -230,21 +244,54 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         String address = getCurrentAddress(latitude,longitude);
         Toast.makeText(this, address, Toast.LENGTH_LONG).show();
 
-        /*
-        일단 User 클래스가 같은 디렉터리에 있어야함.
+        FirebaseUser user = mAuth.getCurrentUser();
+        String mail = user.getEmail();
 
-        레퍼런스 찾기
-        * mPostReference = FirdbaseDatabase.getInstance().getReference();
 
-        * Map<String, Object> childUpdates = new HashMap<>(); // 디비 쌓는 User 클래스에 Hash 가 있어야합니다.
-        * Map<String, Object> postValues = null;
 
-        mUser 객체 생성.
-        * User mUser = new User( user , email, address); // user랑 address만 수정하는 생성자가 있으면 좋겠네요.
-        * postValues = User.toMap();
-        * childUpdates.put("여기엔 유저정보 db 최상위 디렉터리" + user,
-        * mPsotReference.updateChildren(childUpdates);
-        * */
+        mFirebaseDatabaseReference.child("User").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+//                                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+//                                    if(mail.equals(snapshot.child("email").getValue())){
+//                                        Log.d("MainActivity", String.valueOf(snapshot.child("email").getValue()));
+//                                        Toast.makeText(MainActivity.this, "중복된 이메일입니다.", Toast.LENGTH_LONG).show();
+//                                    } else{
+//                                        Log.d("MainActivity", "왜 중복값이 아니죠?");
+//
+//                                        Log.d("MainActivity", String.valueOf(snapshot.child("email")));
+                // User user1 = new User(user.getEmail(), "asdasd");
+//                                        mFirebaseDatabaseReference.child("User").push().setValue(user1);
+//                                    }
+//                                }
+                Iterator<DataSnapshot> child = dataSnapshot.getChildren().iterator();
+                while (child.hasNext()) {//마찬가지로 중복 유무 확인
+                    if (!(mail.equals(child.next().getKey()))) {
+                        mFirebaseDatabaseReference.child("User").child("address").setValue(address);
+                        return;
+                    } else {
+                       // User user1 = new User(user.getEmail(), "asdasd");
+                       // mFirebaseDatabaseReference.child("User").push().setValue(user1);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+        });
+
+
+
+       //  Map<String, Object> childUpdates = new HashMap<>(); // 디비 쌓는 User 클래스에 Hash 가 있어야합니다.
+      //   Map<String, Object> postValues = null;
+
+       // mUser 객체 생성.
+        // User mUser = new User( user , email, address); // user랑 address만 수정하는 생성자가 있으면 좋겠네요.
+        // postValues = User.toMap();
+        // childUpdates.put("여기엔 유저정보 db 최상위 디렉터리" + user, mPsotReference.updateChildren(childUpdates);
 
 
        /* final TextView textview_address = (TextView)findViewById(R.id.textview);

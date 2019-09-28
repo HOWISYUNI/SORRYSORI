@@ -12,11 +12,17 @@ public class FirstFragment extends Fragment {
         // Required empty public constructor
     }
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        //Intent intent1 = new Intent(getActivity(), Decibelfragment.class);
-        //startActivity(intent1);
-        View view = inflater.inflate(R.layout.activity_imsi_decibel, container, false);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        Button btn;
+        View view = inflater.inflate(R.layout.fragment_first, container, false);
+        btn = view.findViewById(R.id.start);
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), Decibelfragment.class);
+                startActivity(intent);
+            }
+        });
         return view;
     }
 }

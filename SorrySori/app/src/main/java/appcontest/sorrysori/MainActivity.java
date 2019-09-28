@@ -9,6 +9,7 @@ import androidx.core.content.ContextCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -52,6 +53,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 
 import static android.widget.Toast.LENGTH_LONG;
@@ -80,6 +82,7 @@ public class MainActivity extends AppCompatActivity {
     public static final int PERMISSION_WIFI_STATE = 2;
 
 
+    @SuppressLint("WrongViewCast")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -133,11 +136,13 @@ public class MainActivity extends AppCompatActivity {
                                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                                     if(mail.equals(snapshot.child("email").getValue())){
                                         Log.d("MainActivity", String.valueOf(snapshot.child("email").getValue()));
-                                        Toast.makeText(MainActivity.this, "중복된 이메일입니다.", Toast.LENGTH_LONG).show();
-                                    } else{
+                                       Toast.makeText(MainActivity.this, "중복된 이메일입니다.", Toast.LENGTH_LONG).show();
+                                       break;
+                                    }
+                                    else{
                                         Log.d("MainActivity", "왜 중복값이 아니죠?");
+                                        Log.d("구글푸쉬", String.valueOf(snapshot.child("email")));
                                         User user1 = new User(user.getEmail(), "asdasd");
-                                        Log.d("MainActivity", String.valueOf(snapshot.child("email")));
                                         mFirebaseDatabaseReference.child("User").push().setValue(user1);
                                     }
                                 }
@@ -146,11 +151,12 @@ public class MainActivity extends AppCompatActivity {
                             public void onCancelled(@NonNull DatabaseError databaseError) {
                             }
                         });
-                        Toast.makeText(MainActivity.this, "구글 로그인 성공!", LENGTH_LONG).show();
-                        Intent intent = new Intent(MainActivity.this, MapsActivity.class);
-                        startActivity(intent);
+
                     }
                 });
+        Toast.makeText(MainActivity.this, "구글 로그인 성공!", LENGTH_LONG).show();
+        Intent intent = new Intent(MainActivity.this, MapsActivity.class);
+        startActivity(intent);
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -171,8 +177,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void signIn(){
-        String email = ((EditText)findViewById(R.id.main_id)).getText().toString();
-        String password = ((EditText)findViewById(R.id.main_password)).getText().toString();
+        @SuppressLint("WrongViewCast") String email = ((EditText)findViewById(R.id.main_id)).getText().toString();
+        @SuppressLint("WrongViewCast") String password = ((EditText)findViewById(R.id.main_password)).getText().toString();
 
         if((email.length() >= 15 && email.length() <= 25) && (password.length() >= 6 && password.length() <= 14)) {
             mAuth.signInWithEmailAndPassword(email, password)
@@ -192,7 +198,7 @@ public class MainActivity extends AppCompatActivity {
                                             } else{
                                                 Log.d("MainActivity", "왜 중복값이 아니죠?");
                                                 User user1 = new User(user.getEmail(), "asdasd");
-                                                Log.d("MainActivity", String.valueOf(snapshot.child("email")));
+                                                Log.d("파이어베이스 푸쉬", String.valueOf(snapshot.child("email")));
                                                 mFirebaseDatabaseReference.child("User").push().setValue(user1);
                                             }
                                         }
