@@ -507,6 +507,11 @@ public class Decibelfragment extends MainActivity implements
         super.onDestroy();
         doUnbindService();
     }
+
+    @Override
+    public void onBackPressed() {
+        finish();
+    }
 }
 
 

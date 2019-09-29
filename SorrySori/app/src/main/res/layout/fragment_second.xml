@@ -2,13 +2,62 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".SecondFragment">
+    android:layout_height="match_parent">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/dec_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="222222222222222222222222222222222222222222" />
+        android:gravity="center_vertical">
 
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:keepScreenOn="true"
+            android:orientation="vertical"
+            android:gravity="center_vertical"
+            tools:context=".Decibelfragment">
+
+            <!--
+        <ImageView
+            android:layout_width="370dp"
+            android:layout_height="wrap_content"
+            android:src="@drawable/graph"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
+            android:layout_gravity="center_horizontal"
+            android:scaleType="fitXY"/>
+      -->
+            <ImageView
+                android:id="@+id/dec_imgs"
+                android:layout_width="370dp"
+                android:layout_height="300dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"
+                android:layout_gravity="center_horizontal"
+                android:src="@drawable/loud" />
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/chat_start"
+                    android:layout_width="294dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:backgroundTint="#BD1E2D"
+                    android:text="채팅 시작"
+                    android:textColor="#FFFFFF"
+                    android:textSize="20dp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </androidx.drawerlayout.widget.DrawerLayout>
 </FrameLayout>

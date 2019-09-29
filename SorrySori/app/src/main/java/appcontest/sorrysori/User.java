@@ -15,13 +15,6 @@ public class User {
     User(){
 
     }
-
-    public Map<String, Object> toMap() {
-        HashMap<String, Object> result = new HashMap<>();
-        result.put("email", email);
-        result.put("address", address);
-        return result;
-    }
 }
 
 

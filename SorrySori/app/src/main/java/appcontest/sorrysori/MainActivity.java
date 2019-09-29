@@ -17,6 +17,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
+import android.location.Address;
+import android.location.Geocoder;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
@@ -55,6 +57,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 
 import static android.widget.Toast.LENGTH_LONG;
 public class MainActivity extends AppCompatActivity {
@@ -62,6 +65,7 @@ public class MainActivity extends AppCompatActivity {
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
     }
     DatabaseReference mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference();
+    private GpsTracker gpsTracker;
     private CheckBox checkBox;
     private String id;
     private boolean saveLoginData;
@@ -80,11 +84,17 @@ public class MainActivity extends AppCompatActivity {
     private ProgressDialog progress;
     public static final int PERMISSION_RECORD_AUDIO_AND_GPS = 1;
     public static final int PERMISSION_WIFI_STATE = 2;
+    double latitude, longitude;
 
 
     @SuppressLint("WrongViewCast")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+
+        gpsTracker = new GpsTracker(this);
+
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Resources res = getResources();
@@ -124,28 +134,26 @@ public class MainActivity extends AppCompatActivity {
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
+                        latitude = gpsTracker.getLatitude();
+                        longitude = gpsTracker.getLongitude();
                         FirebaseUser user = mAuth.getCurrentUser();
                         Log.d("MainActivity", "셋 밸류");
                         String mail = user.getEmail();
+                        String address = getCurrentAddress(latitude,longitude);
+                        User user1 = new User(user.getEmail(), address);
 
-                       // User user1 = new User(user.getEmail(), "asdasd");
-                      //  mFirebaseDatabaseReference.child("User").push().setValue(user1);
-                        mFirebaseDatabaseReference.child("User").addListenerForSingleValueEvent(new ValueEventListener() {
+
+                        mFirebaseDatabaseReference.child("User").addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                                    if(mail.equals(snapshot.child("email").getValue())){
+                                    if(mail.equals(snapshot.child("email").getValue())) {
                                         Log.d("MainActivity", String.valueOf(snapshot.child("email").getValue()));
-                                       Toast.makeText(MainActivity.this, "중복된 이메일입니다.", Toast.LENGTH_LONG).show();
-                                       break;
-                                    }
-                                    else{
-                                        Log.d("MainActivity", "왜 중복값이 아니죠?");
-                                        Log.d("구글푸쉬", String.valueOf(snapshot.child("email")));
-                                        User user1 = new User(user.getEmail(), "asdasd");
-                                        mFirebaseDatabaseReference.child("User").push().setValue(user1);
+                                        //    Toast.makeText(MainActivity.this, "중복된 이메일입니다.", Toast.LENGTH_LONG).show();
+                                        return;
                                     }
                                 }
+                                mFirebaseDatabaseReference.child("User").push().setValue(user1);
                             }
                             @Override
                             public void onCancelled(@NonNull DatabaseError databaseError) {
@@ -155,7 +163,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
         Toast.makeText(MainActivity.this, "구글 로그인 성공!", LENGTH_LONG).show();
-        Intent intent = new Intent(MainActivity.this, MapsActivity.class);
+        Intent intent = new Intent(MainActivity.this, MainMenuActivity.class);
         startActivity(intent);
     }
 
@@ -185,23 +193,24 @@ public class MainActivity extends AppCompatActivity {
                     .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
+                            latitude = gpsTracker.getLatitude();
+                            longitude = gpsTracker.getLongitude();
                             if (task.isSuccessful()) {
+                                String address = getCurrentAddress(latitude,longitude);
                                 FirebaseUser user = mAuth.getCurrentUser();
                                 String mail = user.getEmail();
-                                mFirebaseDatabaseReference.child("User").addListenerForSingleValueEvent(new ValueEventListener() {
+                                User user1 = new User(user.getEmail(), address);
+                                mFirebaseDatabaseReference.child("User").addValueEventListener(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                         for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                                            if(mail.equals(snapshot.child("email").getValue())){
+                                            if(mail.equals(snapshot.child("email").getValue())) {
                                                 Log.d("MainActivity", String.valueOf(snapshot.child("email").getValue()));
-                                                Toast.makeText(MainActivity.this, "중복된 이메일입니다.", Toast.LENGTH_LONG).show();
-                                            } else{
-                                                Log.d("MainActivity", "왜 중복값이 아니죠?");
-                                                User user1 = new User(user.getEmail(), "asdasd");
-                                                Log.d("파이어베이스 푸쉬", String.valueOf(snapshot.child("email")));
-                                                mFirebaseDatabaseReference.child("User").push().setValue(user1);
+                                                //    Toast.makeText(MainActivity.this, "중복된 이메일입니다.", Toast.LENGTH_LONG).show();
+                                                return;
                                             }
                                         }
+                                        mFirebaseDatabaseReference.child("User").push().setValue(user1);
                                     }
                                     @Override
                                     public void onCancelled(@NonNull DatabaseError databaseError) {
@@ -231,7 +240,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void signUp(View view){
-        Intent intent = new Intent(MainActivity.this, MainMenuActivity.class);
+        Intent intent = new Intent(MainActivity.this, SignUpActivity.class);
         startActivity(intent);
     }
 
@@ -614,5 +623,32 @@ public class MainActivity extends AppCompatActivity {
         } catch (NumberFormatException ex) {
             return defaultValue;
         }
+    }
+
+    private String getCurrentAddress(double latitude, double longitude) {
+
+        // Geocoder : GPS 정보를 법정주소로 변환
+        Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+        List<Address> addresses;
+
+        try {
+            addresses = geocoder.getFromLocation(latitude,longitude,7);// 위도, 경도 정보를 바탕으로 주소 가져오는 메서드
+        }catch(IOException ioException){//geocoder.getFromLocation을 사용하려면 try catch 예외처리를 해줘야함
+            // 네트워크 문제
+            Toast.makeText(this, "GEOCODER 사용불가", Toast.LENGTH_LONG).show();
+            return "GEOCODER 사용불가";
+        }catch(IllegalArgumentException illegalArgumentException){
+            Toast.makeText(this, "잘못된 GPS 좌표", Toast.LENGTH_LONG).show();
+            return  "잘못된 GPS 좌표";
+        }
+
+        if (addresses == null || addresses.size() == 0){
+            Toast.makeText(this, "주소 미발견", Toast.LENGTH_LONG).show();
+            return "주소 미발견";
+        }
+
+        // try 문에서 getFromLocation으로 얻은 주소는 addresses 리스트의 0번에 저장되어 있다.
+        Address address = addresses.get(0); // Address 클래스는 import한 android.Location.Address로부터 사용.
+        return address.getAddressLine(0).toString()+"\n";
     }
 }

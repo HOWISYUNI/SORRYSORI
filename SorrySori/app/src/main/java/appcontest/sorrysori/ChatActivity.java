@@ -25,7 +25,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 
-import static java.lang.System.load;
+
 
 public class ChatActivity extends AppCompatActivity {
 
@@ -57,17 +57,8 @@ public class ChatActivity extends AppCompatActivity {
                 mMessageEditText.setText("");
             }
         });
-
-
-
         mFirebaseAuth = FirebaseAuth.getInstance();
         mFirebaseUser = mFirebaseAuth.getCurrentUser();
-
-        /*mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .enableAutoManage(this, (GoogleApiClient.OnConnectionFailedListener) this)
-            .addApi(Auth.GOOGLE_SIGN_IN_API)
-                .build();
-                */
 
         if(mFirebaseUser != null){
             mUsername = mFirebaseUser.getDisplayName();
