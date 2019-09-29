@@ -11,13 +11,11 @@ public class MessageViewHolder extends RecyclerView.ViewHolder {
 
     public TextView nameTextView;
     public TextView messageTextView;
-    public CircleImageView photoImageView;
 
     public MessageViewHolder(@NonNull View itemView) {
         super(itemView);
 
         nameTextView = itemView.findViewById(R.id.nameTextView);
         messageTextView = itemView.findViewById(R.id.messageTextView);
-        photoImageView = itemView.findViewById(R.id.photoImageview);
     }
 }

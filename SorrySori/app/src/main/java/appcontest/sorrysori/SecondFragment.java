@@ -18,7 +18,6 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -37,17 +36,16 @@ public class SecondFragment extends Fragment {
     public static String result= "1";
     private GpsTracker gpsTracker;
     private Button btn;
+    private String address;
     private FirebaseAuth mAuth;
     double latitude, longitude;
     DatabaseReference mFirebaseDatabaseReference;
 
     public SecondFragment() {
-        // Required empty public constructor
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
 
         mAuth = FirebaseAuth.getInstance();
         View view = inflater.inflate(R.layout.fragment_second, container, false);
@@ -57,16 +55,14 @@ public class SecondFragment extends Fragment {
         gpsTracker = new GpsTracker(context);
         latitude = gpsTracker.getLatitude();
         longitude = gpsTracker.getLongitude();
-        String address = getCurrentAddress(latitude,longitude);
+        address = getCurrentAddress(latitude,longitude);
         Log.d("address", address );
 
         mFirebaseDatabaseReference.child("User").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    Log.d("address2", String.valueOf(snapshot.child("address").getValue()));
-                    Log.d("email", String.valueOf(snapshot.child("email").getValue()));
-                    if((snapshot.child("address").equals(address))){
+                    if(address.equals(snapshot.child("address").getValue())){
                         Log.d("database user", String.valueOf(snapshot.child("email").getValue()));
                         result = "same";
                         Log.d("result", result);
@@ -93,15 +89,11 @@ public class SecondFragment extends Fragment {
     }
 
     private String getCurrentAddress(double latitude, double longitude) {
-
-        // Geocoder : GPS 정보를 법정주소로 변환
         Geocoder geocoder = new Geocoder(getContext(), Locale.getDefault());
         List<Address> addresses;
-
         try {
-            addresses = geocoder.getFromLocation(latitude,longitude,7);// 위도, 경도 정보를 바탕으로 주소 가져오는 메서드
-        }catch(IOException ioException){//geocoder.getFromLocation을 사용하려면 try catch 예외처리를 해줘야함
-            // 네트워크 문제
+            addresses = geocoder.getFromLocation(latitude,longitude,7);
+        }catch(IOException ioException){
             Toast.makeText(getContext(), "GEOCODER 사용불가", Toast.LENGTH_LONG).show();
             return "GEOCODER 사용불가";
         }catch(IllegalArgumentException illegalArgumentException){
@@ -113,7 +105,6 @@ public class SecondFragment extends Fragment {
             Toast.makeText(getContext(), "주소 미발견", Toast.LENGTH_LONG).show();
             return "주소 미발견";
         }
-
         // try 문에서 getFromLocation으로 얻은 주소는 addresses 리스트의 0번에 저장되어 있다.
         Address address = addresses.get(0); // Address 클래스는 import한 android.Location.Address로부터 사용.
         return address.getAddressLine(0).toString()+"\n";

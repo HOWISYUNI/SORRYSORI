@@ -1,5 +1,6 @@
 package appcontest.sorrysori;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -7,7 +8,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +17,6 @@ import android.widget.EditText;
 import com.bumptech.glide.Glide;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
-import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -52,7 +51,7 @@ public class ChatActivity extends AppCompatActivity {
         send_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ChatMessage chatMessage = new ChatMessage(mMessageEditText.getText().toString(), mUsername, mPhotoUrl);
+                ChatMessage chatMessage = new ChatMessage(mMessageEditText.getText().toString(), mPhotoUrl);
                 mFirebaseDatabaseReference.child("message").push().setValue(chatMessage);
                 mMessageEditText.setText("");
             }
@@ -60,28 +59,14 @@ public class ChatActivity extends AppCompatActivity {
         mFirebaseAuth = FirebaseAuth.getInstance();
         mFirebaseUser = mFirebaseAuth.getCurrentUser();
 
-        if(mFirebaseUser != null){
-            mUsername = mFirebaseUser.getDisplayName();
-            if(mFirebaseUser.getPhotoUrl() != null)
-                mPhotoUrl = mFirebaseUser.getPhotoUrl().toString();
-        }
-
         DatabaseReference query = mFirebaseDatabaseReference.child("message");
         final FirebaseRecyclerOptions<ChatMessage>  options = (new FirebaseRecyclerOptions.Builder()).setQuery((Query)query, ChatMessage.class).build();
 
         mFirebaseAdapter = new FirebaseRecyclerAdapter<ChatMessage, MessageViewHolder>(options) {
             @Override
             protected void onBindViewHolder(@NonNull MessageViewHolder holder, int positon, @NonNull ChatMessage model) {
-                holder.messageTextView.setBackgroundResource(R.drawable.left);
-                holder.messageTextView.setText(model.text);
-                holder.nameTextView.setText(model.name);
-
-                if (model.photoUrl == null) {
-                    holder.photoImageView.setImageDrawable(
-                            ContextCompat.getDrawable(context, R.drawable.ic_account_circle_black_24dp));
-                } else {
-                    Glide.with(context).load(model.photoUrl).into(holder.photoImageView);
-                }
+                    holder.messageTextView.setBackgroundResource(R.drawable.left);
+                    holder.messageTextView.setText(model.text);
             }
             @NonNull
             @Override
@@ -104,7 +89,13 @@ public class ChatActivity extends AppCompatActivity {
     @Override
     public void onStop(){
         super.onStop();
-        mFirebaseAdapter.startListening();
+        mFirebaseAdapter.stopListening();
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        DatabaseReference mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference();
+        mFirebaseDatabaseReference.child("message").setValue(null);
+    }
 }

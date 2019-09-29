@@ -93,8 +93,6 @@ public class MainActivity extends AppCompatActivity {
 
 
         gpsTracker = new GpsTracker(this);
-
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Resources res = getResources();
@@ -640,11 +638,6 @@ public class MainActivity extends AppCompatActivity {
         }catch(IllegalArgumentException illegalArgumentException){
             Toast.makeText(this, "잘못된 GPS 좌표", Toast.LENGTH_LONG).show();
             return  "잘못된 GPS 좌표";
-        }
-
-        if (addresses == null || addresses.size() == 0){
-            Toast.makeText(this, "주소 미발견", Toast.LENGTH_LONG).show();
-            return "주소 미발견";
         }
 
         // try 문에서 getFromLocation으로 얻은 주소는 addresses 리스트의 0번에 저장되어 있다.
