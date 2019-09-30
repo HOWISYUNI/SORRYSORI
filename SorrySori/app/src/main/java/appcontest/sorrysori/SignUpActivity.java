@@ -37,15 +37,18 @@ public class SignUpActivity extends AppCompatActivity {
 
         String email = ((EditText)findViewById(R.id.sign_id)).getText().toString();
         String password = ((EditText)findViewById(R.id.sign_password)).getText().toString();
+        String password2 = ((EditText)findViewById(R.id.sign_password2)).getText().toString();
 
-        if((email.length() >= 15 && email.length() <= 25) && (password.length() >= 6 && password.length() <= 14)) {
+        Log.d("패스워드", password);
+        Log.d("패스워드", password2);
+
+        if((email.length() >= 15 && email.length() <= 25) && (password.length() >= 6 && password.length() <= 14) && password.equals(password2) ) {
             mAuth.createUserWithEmailAndPassword(email, password)
                     .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
                                 Log.d("회원가입", "회원가입 완료");
-                                FirebaseUser user = mAuth.getCurrentUser();
                                 Toast.makeText(SignUpActivity.this, "회원가입에 성공하였습니다.", Toast.LENGTH_LONG).show();
                                 finish();
                             } else {
@@ -59,7 +62,9 @@ public class SignUpActivity extends AppCompatActivity {
             Toast.makeText(this, "이메일과 비밀번호를 입력해주세요.", Toast.LENGTH_LONG).show();
         else if(email.length() > 25 || password.length() > 14)
             Toast.makeText(this, "이메일 또는 패스워드가 깁니다.", Toast.LENGTH_LONG).show();
-        else
+        else if(email.length() <= 15 || password.length() <= 6)
             Toast.makeText(this, "이메일 또는 패스워드가 짧습니다.", Toast.LENGTH_LONG).show();
+        else
+            Toast.makeText(this, "입력된 비밀번호와 다릅니다.", Toast.LENGTH_LONG).show();
     }
 }

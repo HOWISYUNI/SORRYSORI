@@ -29,22 +29,15 @@
                 android:src="@drawable/megaphone" />
 
             <TextView
-                android:id="@+id/dec_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_margin="10dp"
-                android:text="-"
-                android:textSize="30sp" />
+                android:id="@+id/dec_text"
+                android:textSize="30dp"
+                android:layout_marginTop="30dp"
+                android:layout_marginBottom="20dp"
+                android:text="12"/>
 
         </LinearLayout>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:text="현재위치"
-            android:textSize="30sp" />
 
         <!--
     <ImageView

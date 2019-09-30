@@ -394,13 +394,14 @@ public class Decibelfragment extends MainActivity implements
                     //LeqStats leqStats = activity.measurementService.getFastLeqStats();
                     final TextView mTextView = (TextView) activity.findViewById(R.id.dec_text);
                     formatdBA(leq, mTextView);
+
                     final ImageView mImageView = (ImageView) activity.findViewById(R.id.dec_imgs);
 
                     int nc = Decibelfragment.getNEcatColors(leq); // Choose the color category in
                     int img = Decibelfragment.getNEImgs(leq); // Choose the img category in
                     // function of the sound level
-                    mTextView.setTextColor(activity.NE_COLORS[nc]);
                     mImageView.setImageResource(activity.NE_IMGS[img]);
+                    mTextView.setTextColor(activity.NE_COLORS[nc]);
 
                     // Spectrum data
                     //activity.updateSpectrumGUI();

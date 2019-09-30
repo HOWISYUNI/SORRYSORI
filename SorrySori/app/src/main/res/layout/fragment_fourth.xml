@@ -2,40 +2,69 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:background="@drawable/background2"
     android:layout_height="match_parent"
     tools:context=".FourthFragment">
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
 
-    <!-- TODO: Update blank fragment layout -->
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/b1"
-        android:text="b1"
-        android:layout_marginBottom="30dp"/>
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_marginBottom="30dp"
-        android:layout_height="wrap_content"
-        android:text="b2"
-        android:id="@+id/b2"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_weight="0.1"
+            android:textStyle="bold"
+            android:layout_height="wrap_content"
+            android:text="전화상담" />
 
-    <Button
-        android:id="@+id/b3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="b3" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_weight="0.1"
+            android:text="운영시간 : 09:00~18:00(점심시간 : 12:00~13:00)"
+            android:textStyle="bold" />
+
+
+        <Button
+            android:layout_marginTop="20dp"
+            android:id="@+id/b1"
+            android:layout_width="350dp"
+            android:layout_height="10dp"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:background="@drawable/btn1" />
+
+        <Button
+            android:id="@+id/b2"
+            android:layout_width="350dp"
+            android:layout_height="0dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="60dp"
+            android:layout_marginBottom="30dp"
+            android:layout_weight="1"
+            android:background="@drawable/btn2" />
+
+        <Button
+            android:id="@+id/b3"
+            android:layout_width="350dp"
+            android:layout_height="0dp"
+            android:layout_gravity="center"
+            android:layout_marginBottom="30dp"
+
+            android:layout_weight="1"
+            android:background="@drawable/btn3" />
 
         <Button
             android:id="@+id/b0"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="b0" />
+            android:layout_width="350dp"
+            android:layout_height="0dp"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:layout_marginBottom="100dp"
+            android:background="@drawable/btn4" />
     </LinearLayout>
 
 </FrameLayout>

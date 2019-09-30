@@ -1,34 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SignUpActivity">
+    tools:context=".SignUpActivity" android:background="@drawable/orange">
+
+    <ImageView
+        android:layout_weight="4"
+        android:id="@+id/imageView3"
+        android:layout_width="320dp"
+        android:layout_marginLeft="20dp"
+        android:layout_height="100dp"
+        android:background="@drawable/mainactivity"
+        android:layout_gravity="right|top"
+        android:layout_marginBottom="60dp"/>
 
 
-    <EditText
-        android:layout_weight="1"
-        android:id="@+id/sign_id"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:text="Name" />
+    <LinearLayout
+        android:layout_width="350dp"
+        android:layout_height="300dp"
+        android:orientation="vertical" android:layout_marginBottom="50dp" android:gravity="center"
+        android:background="@drawable/signupbox" android:layout_gravity="bottom|center">
+        <EditText
+            android:layout_weight="1"
+            android:id="@+id/sign_id"
+            android:layout_width="280dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="60dp"
+            android:background="@drawable/buttonside2"
+            android:ems="10"
+            android:hint="        E-mail을 입력하세요."
+            android:inputType="textEmailAddress"
+            android:textColorHint="#22B573"
+            android:textStyle="bold"/>
 
-    <EditText
-        android:layout_weight="1"
-        android:id="@+id/sign_password"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="textPassword" />
+        <EditText
+            android:layout_weight="1"
+            android:id="@+id/sign_password"
+            android:layout_width="280dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/buttonside2"
+            android:ems="10"
+            android:hint="        Password를 입력하세요."
+            android:textColorHint="#22B573"
+            android:textStyle="bold"
+            android:inputType="textPassword"/>
 
-    <Button
-        android:layout_weight="1"
-        android:onClick="sign"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Button" />
+        <EditText
+            android:layout_weight="1"
+            android:id="@+id/sign_password2"
+            android:layout_width="280dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/buttonside2"
+            android:ems="10"
+            android:hint="        Password 확인"
+            android:textColorHint="#22B573"
+            android:textStyle="bold"
+            android:inputType="textPassword"/>
+
+        <Button
+            android:layout_weight="1"
+            android:onClick="sign"
+            android:layout_width="200dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="15dp"
+            android:background="@drawable/signup_button"/>
+    </LinearLayout>
 </LinearLayout>

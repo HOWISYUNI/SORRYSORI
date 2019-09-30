@@ -77,7 +77,7 @@ public class FourthFragment extends Fragment {
 
                 Context c = v.getContext();
                 Intent intent = new Intent(Intent.ACTION_VIEW);
-                intent.setData(Uri.parse("http://www.naver.com"));
+                intent.setData(Uri.parse("http://ecc.me.go.kr"));
 
                 try {
                     c.startActivity(intent);
@@ -94,7 +94,7 @@ public class FourthFragment extends Fragment {
 
                 Context c = v.getContext();
                 Intent intent = new Intent(Intent.ACTION_VIEW);
-                intent.setData(Uri.parse("http://www.daum.net"));
+                intent.setData(Uri.parse("http://www.k-apt.go.kr"));
 
                 try {
                     c.startActivity(intent);
